@@ -1,0 +1,15 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getOffres } from "../../js/backend.mjs";
+import Card from "../../components/Card.astro";
+
+const offres = await getOffres();
+---
+
+<Layout titre="Offres">
+	<h1 class="text-fuchsia-950 text-5xl mb-8">Offres</h1>
+
+	<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+		{offres.map((offre) => <Card offre={offre} />)}
+	</div>
+</Layout>

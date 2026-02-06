@@ -1,0 +1,24 @@
+---
+import PbImage from "./PbImage.astro";
+
+const { offre } = Astro.props;
+console.log(offre);
+---
+
+<div
+    class="card bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
+>
+    {
+        offre.img && offre.img.length > 0 && (
+            <PbImage
+                record={offre}
+                recordImage={offre.img[0]}
+                width={400}
+                height={300}
+            />
+        )
+    }
+    <div class="p-4">
+        <h3 class="text-xl font-semibold text-gray-800">{offre.nom_maison}</h3>
+    </div>
+</div>
