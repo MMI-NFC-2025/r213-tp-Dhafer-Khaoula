@@ -1,0 +1,61 @@
+---
+import { getOffre } from '../../js/backend.mjs';
+import PbImage from '../../components/PbImage.astro';
+
+const { id } = Astro.params;
+const offre = await getOffre(id);
+
+if (!offre) {
+    return Astro.redirect('/offres');
+}
+---
+
+<base titre={offre.nom_maison}>
+    <div class="max-w-4xl mx-auto p-6">
+        <h1 class="text-4xl font-bold text-fuchsia-950 mb-6">{offre.nom_maison}</h1>
+        
+        {offre.img && offre.img.length > 0 && (
+            <div class="mb-6">
+                <PbImage 
+                    record={offre} 
+                    recordImage={offre.img[0]} 
+                    width={800}
+                    height={600}
+                />
+            </div>
+        )}
+        
+        <div class="bg-white shadow-lg rounded-lg p-6">
+            <h2 class="text-2xl font-semibold mb-4">Détails de la maison</h2>
+            <ul class="space-y-3">
+                <li class="flex items-start">
+                    <span class="font-semibold mr-2">📍 Adresse:</span>
+                    <span>{offre.adresse}</span>
+                </li>
+                <li class="flex items-start">
+                    <span class="font-semibold mr-2">📐 Surface:</span>
+                    <span>{offre.surface} m²</span>
+                </li>
+                <li class="flex items-start">
+                    <span class="font-semibold mr-2">💰 Prix:</span>
+                    <span>{offre.prix.toLocaleString('fr-FR')} €</span>
+                </li>
+                {offre.description && (
+                    <li class="flex items-start">
+                        <span class="font-semibold mr-2">📝 Description:</span>
+                        <span>{offre.description}</span>
+                    </li>
+                )}
+            </ul>
+            
+            <div class="mt-6">
+                <a 
+                    href="/offres" 
+                    class="inline-block bg-fuchsia-950 text-white px-6 py-2 rounded hover:bg-fuchsia-800 transition-colors"
+                >
+                    ← Retour aux offres
+                </a>
+            </div>
+        </div>
+    </div>
+</Base>

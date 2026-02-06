@@ -13,12 +13,12 @@ export async function getOffres() {
     }
 }
 
-export async function getOffreById() {
+export async function getOffre(id) {
     try {
-        let offre = await db.collection("Maison").getOne(offreId);
-        return offre;
+        const data = await db.collection('Maison').getOne(id);
+        return data;
     } catch (error) {
-        console.error("Error fetching offre by ID:", error);
+        console.log('Une erreur est survenue en lisant la maison', error);
         return null;
     }
 }
@@ -36,5 +36,31 @@ export async function setFavori(offreId, isFavori) {
     } catch (error) {
         console.error("Error setting favori status:", error);
         return null;
+    }
+}
+
+export async function getOffresBySurface(minSurface) {
+    try {
+        let data = await db.collection('Maison').getFullList({
+            filter: `surface >= ${minSurface}`,
+            sort: '-created',
+        });
+        return data;
+    } catch (error) {
+        console.log('Une erreur est survenue en lisant les maisons par surface', error);
+        return [];
+    }
+}
+
+export async function getOffresByPrix(maxPrix) {
+    try {
+        let data = await db.collection('Maison').getFullList({
+            filter: `prix <= ${maxPrix}`,
+            sort: '-created',
+        });
+        return data;
+    } catch (error) {
+        console.log('Une erreur est survenue en lisant les maisons par prix', error);
+        return [];
     }
 }
