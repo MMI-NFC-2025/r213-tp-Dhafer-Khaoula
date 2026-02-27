@@ -10,13 +10,19 @@ const offres = await getOffres();
 	<h1 class="text-fuchsia-950 text-5xl mb-6">Offres</h1>
 
 	<div class="mb-8 flex gap-4">
-		<a 
+		<a
+			href="/offres/add"
+			class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition-colors"
+		>
+			➕ Ajouter une offre
+		</a>
+		<a
 			href="/offres/surface/80"
 			class="bg-fuchsia-950 text-white px-4 py-2 rounded hover:bg-fuchsia-800 transition-colors"
 		>
 			Maisons > 80 m²
 		</a>
-		<a 
+		<a
 			href="/offres/prix/300000"
 			class="bg-fuchsia-950 text-white px-4 py-2 rounded hover:bg-fuchsia-800 transition-colors"
 		>
