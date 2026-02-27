@@ -25,6 +25,17 @@ if (Astro.request.method === "POST") {
 } else {
 	offres = await getOffres();
 }
+
+let categories = ['Tout', ... new Set(offres.map(ev => ev.categorie))];
+if(Astro.request.method === "POST") {
+    const formData = await Astro.request.formData();
+    const selectedCategory = formData.get("categorie");
+    console.log(selectedCategory);
+    if(selectedCategory && selectedCategory !== "Tout") {
+        offres = offres.filter(ev => ev.categorie === selectedCategory);
+        categories = [selectedCategory, ...categories.filter(cat => cat !== selectedCategory)];
+    }
+}
 ---
 
 <Layout titre="Offres">
@@ -43,14 +54,15 @@ if (Astro.request.method === "POST") {
 			href="/offres/add"
 			class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition-colors"
 		>
-			➕ Ajouter une offre
+			+ Ajouter une offre
 		</a>
 		<a
 			href="/offres/surface/80"
 			class="bg-fuchsia-950 text-white px-4 py-2 rounded hover:bg-fuchsia-800 transition-colors"
 		>
-			Maisons > 80 m²
+			Maisons &lt; 80 m²
 		</a>
+		
 		<a
 			href="/offres/prix/300000"
 			class="bg-fuchsia-950 text-white px-4 py-2 rounded hover:bg-fuchsia-800 transition-colors"
