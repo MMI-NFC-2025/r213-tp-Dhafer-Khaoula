@@ -64,6 +64,19 @@ export async function getOffresByPrix(maxPrix) {
         return [];
     }
 }
+export async function filterByPrix(minPrix, maxPrix) {
+    try {
+        let data = await db.collection('Maison').getFullList({
+            filter: `prix >= ${minPrix} && prix <= ${maxPrix}`,
+            sort: '-created',
+        });
+        return data;
+    } catch (error) {
+        console.log('Une erreur est survenue en filtrant les maisons par prix', error);
+        return [];
+    }
+}
+
 export async function addOffre(house) {
     try {
         await db.collection('maison').create(house);
