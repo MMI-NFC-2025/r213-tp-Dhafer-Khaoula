@@ -1,12 +1,14 @@
 ---
 import PbImage from "./PbImage.astro";
+import favoriteSvg from "../assets/favorite.svg";
+import favoriteFilledSvg from "../assets/favorite_filled.svg";
 
 const { offre } = Astro.props;
 console.log(offre);
 ---
 
 <div
-    class="card bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
+    class="card bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 relative"
 >
     {
         offre.img && offre.img.length > 0 && (
@@ -27,4 +29,55 @@ console.log(offre);
             Voir plus →
         </a>
     </div>
+    <button
+        class="favoriteButton absolute bottom-0 left-0 p-2 text-white rounded-br-lg"
+        data-offre={JSON.stringify(offre)}
+        data-favorite-src={favoriteSvg.src}
+        data-favorite-filled-src={favoriteFilledSvg.src}
+    >
+        <img
+            id="favorite-icon"
+            src={offre.favori ? favoriteFilledSvg.src : favoriteSvg.src}
+            alt="Favorite Icon"
+            class="w-6 h-6"
+        />
+    </button>
 </div>
+
+<script is:inline>
+    async function setFavori(house) {
+        try {
+            await fetch(`http://127.0.0.1:8090/api/collections/Maison/records/${house.id}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ favori: !house.favori })
+            });
+        } catch (error) {
+            console.error('Erreur lors de la mise à jour du favori:', error);
+        }
+    }
+    const favoriteButtons = document.querySelectorAll(".favoriteButton");
+
+    favoriteButtons.forEach(button => {
+        button.addEventListener('click', () => {
+
+            const offreData = JSON.parse(button.dataset.offre || '{}');
+            const newFavori = !offreData.favori;
+
+            setFavori(offreData);
+
+            const favIcon = button.querySelector('#favorite-icon');
+            const favoriteSrc = button.dataset.favoriteSrc;
+            const favoriteFilledSrc = button.dataset.favoriteFilledSrc;
+            
+            if (favIcon) {
+                favIcon.src = newFavori ? favoriteFilledSrc : favoriteSrc;
+            }
+
+            offreData.favori = newFavori;
+            button.dataset.offre = JSON.stringify(offreData);
+        });
+    });
+</script>

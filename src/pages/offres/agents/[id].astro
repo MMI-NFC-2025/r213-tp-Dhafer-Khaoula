@@ -1,0 +1,25 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import { getOffresByAgent } from "../../../js/backend.mjs";
+import Card from "../../../components/Card.astro";
+
+const id = Astro.params.id;
+
+const offres = await getOffresByAgent(id);
+if (!offres || offres.length === 0) {
+    console.error(`Aucune offre trouvée pour l'agent ${id}`);
+}
+---
+
+<Layout title="Offres de l'agent">
+    <h1 class="text-5xl text-cyan-700 mb-6">Offres de l'agent</h1>
+    {offres && offres.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {offres.map((offre) => (
+                <Card offre={offre} />
+            ))}
+        </div>
+    ) : (
+        <p class="text-gray-600">Aucune offre disponible pour cet agent.</p>
+    )}
+</Layout>
